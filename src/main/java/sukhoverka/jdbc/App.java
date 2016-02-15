@@ -15,7 +15,9 @@ public class App {
         
 
         Dao dao = new Dao();
-        dao.insertUsers(100);
+        dao.insertUsers();
+        dao.insertFriendships();
+        dao.insertLikes();
 
     }
 
