@@ -5,10 +5,13 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class Dao {
 
@@ -36,7 +39,7 @@ public class Dao {
         try(Connection cn = dataSource.getConnection();
             PreparedStatement ps = cn.prepareStatement("INSERT INTO FRIENDSHIPS (USER_ID1, USER_ID2, TIMESTAMP) VALUES(?, ?, ?)")
         ) {
-            for(int k = 0; k < 70; k++) {
+            for(int k = 0; k < 150; k++) {
                 for(int i = 0; i < 1000; i++) {
                     ps.setInt(1,k);
                     ps.setInt(2,i);
@@ -66,5 +69,19 @@ public class Dao {
             }
             ps.executeBatch();
         }        
+    }
+    
+    public List<String> selectLuckyPersons() throws SQLException {
+        List<String> luckyPersons = new ArrayList<>();
+        try(Connection cn = dataSource.getConnection();
+            PreparedStatement ps = cn.prepareStatement("SELECT * from USERS join FRIENDSHIPS on USERS.ID = FRIENDSHIPS.USER_ID1") // todo: write sql query here
+        ) {
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                luckyPersons.add(rs.getString("NAME"));                
+            }
+
+        }
+        return luckyPersons;
     }
 }

@@ -23,6 +23,8 @@ public class TableCreator {
             + ")";
 
 
+    private String CREATE_USERS_SEQUENCE_SQL = "CREATE SEQUENCE \"USERS_SEQUENCE\" MINVALUE 1 MAXVALUE 9999999999 INCREMENT BY 1 START WITH 3";
+
     private String CREATE_TABLE_FRIENDSHIPS_SQL = "CREATE TABLE FRIENDSHIPS("
             + "USER_ID1 NUMBER(10) NOT NULL, "
             + "USER_ID2 NUMBER(10) NOT NULL, "
@@ -64,6 +66,10 @@ public class TableCreator {
 
     public void createUsersTable() throws SQLException {
         createTable(TABLE_USERS, CREATE_TABLE_USERS_SQL);
+    }
+
+    public void createUsersSequence() throws SQLException {
+        createSequence("USERS_SEQUENCE", CREATE_USERS_SEQUENCE_SQL);
     }
 
     public void createFriendshipsTable() throws SQLException {
@@ -117,7 +123,7 @@ public class TableCreator {
     }
 
     private void createSequence(String sequenceName, String createSequenceSql) throws SQLException {
-//        dropSequenceIfExists(sequenceName);
+        dropSequenceIfExists(sequenceName);
         try (Connection cn = getConnection();
              PreparedStatement st = cn.prepareStatement(createSequenceSql)) {
             st.executeUpdate();
